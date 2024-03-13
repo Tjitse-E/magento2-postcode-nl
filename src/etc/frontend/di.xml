@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\StreetAttributeField" type="Trinos\PostcodeNL\Model\Form\EntityField\EavEntityAddress\StreetAttributeField"/>
-    <type name="Hyva\Checkout\Model\ConfigDataHyvaThemes\Checkout">
+    <type name="Hyva\Checkout\Model\ConfigData\HyvaThemes\Checkout">
         <plugin name="trinos_postcodenl_sort_form_fields_mapping" type="Trinos\PostcodeNL\Plugin\SortFormFieldsMapping"/>
     </type>
 
