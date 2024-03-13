@@ -11,7 +11,7 @@ use Trinos\PostcodeNL\Model\PostcodeManagement;
 
 class WithPostcodecheckModifier implements EntityFormModifierInterface
 {
-    private const KEY_MANUAL_MODE = 'postcodenl_manual_mode';
+    public const KEY_MANUAL_MODE = 'postcodenl_manual_mode';
 
     public function __construct(
         protected PostcodeManagement $postcodeManagement,
@@ -25,6 +25,7 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
             'form:build',
             [$this, 'explodeStreetRows']
         );
+
         $form->registerModificationListener(
             'initPostcodeCheckFields',
             'form:build',
@@ -154,7 +155,7 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
         if ($manualMode && $manualMode->getValue()) {
             return;
         }
-        
+
         $response = $this->validatePostcode($form);
 
         $postcode = $form->getField(AddressInterface::KEY_POSTCODE);
