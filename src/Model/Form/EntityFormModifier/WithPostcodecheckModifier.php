@@ -99,7 +99,7 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
             return $response;
         }
 
-        if (count($response['houseNumberAdditions']) > 1) {
+        if (isset($response['houseNumberAdditions']) && count($response['houseNumberAdditions']) > 1) {
             // The option key should be the same as the label.
             $options = array_combine($response['houseNumberAdditions'], $response['houseNumberAdditions']);
             $addition?->setOptions($options);
