@@ -128,7 +128,7 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
 
         foreach ([$postcode, $housenumber, $addition, $manualMode] as $field) {
             if ($field) {
-                $field->setAttribute('@change.capture', '$wire.save()');
+                $field->setAttribute('@change.capture', '$wire.store');
             }
         }
     }
