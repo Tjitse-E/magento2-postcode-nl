@@ -6,7 +6,9 @@ use Hyva\Checkout\Magewire\Checkout\AddressView\AbstractMagewireAddressForm;
 use Hyva\Checkout\Magewire\Checkout\AddressView\MagewireAddressFormInterface;
 use Hyva\Checkout\Model\Form\EntityFormInterface;
 use Hyva\Checkout\Model\Form\EntityFormModifierInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Store\Model\ScopeInterface;
 use Trinos\PostcodeNL\Model\PostcodeManagement;
 
 class WithPostcodecheckModifier implements EntityFormModifierInterface
@@ -15,6 +17,7 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
 
     public function __construct(
         protected PostcodeManagement $postcodeManagement,
+        private ScopeConfigInterface $scopeConfig
     ) {
     }
 
@@ -31,6 +34,10 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
             'form:build',
             [$this, 'initPostcodeCheckFields']
         );
+
+        if (!$this->isEnabled()) {
+            return $form;
+        }
 
         $form->registerModificationListener(
             'manualModeUpdated',
@@ -65,7 +72,7 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
         $houseNumber?->setAttribute('autocomplete', 'address-line2');
         $addition?->setAttribute('autocomplete', 'address-line3');
 
-        if ($country !== 'NL') {
+        if ($country !== 'NL' || !$this->isEnabled()) {
             if ($manualMode) {
                 $form->removeField($manualMode);
             }
@@ -189,5 +196,13 @@ class WithPostcodecheckModifier implements EntityFormModifierInterface
             $relative->setData('id', "{$streetField->getName()}.{$relative->getPosition()}");
             $form->addField($relative);
         }
+    }
+
+    private function isEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            'postcodenl_api/general/enabled',
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }
